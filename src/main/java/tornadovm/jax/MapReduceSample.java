@@ -15,7 +15,6 @@ import java.util.stream.IntStream;
  */
 public class MapReduceSample {
 
-    private TaskSchedule ts;
     private static final int SIZE = 512;
 
     private static void map(float[] a,float[] b,float[] c) {
@@ -31,9 +30,9 @@ public class MapReduceSample {
     }
 
     private void compute(float[] a,float[] b,float[] c,float[] output) {
-        ts = new TaskSchedule("s0")
-                .task("map", MapReduceSample::map,a,b,c)
-                .task("reduce", MapReduceSample::reduce,c,output)
+        TaskSchedule ts = new TaskSchedule("s0")
+                .task("map",MapReduceSample::map,a,b,c)
+                .task("reduce",MapReduceSample::reduce,c,output)
                 .streamOut(output);
         ts.execute();
     }
