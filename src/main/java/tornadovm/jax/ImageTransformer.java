@@ -17,7 +17,7 @@ public class ImageTransformer {
     private static final boolean PARALLEL_COMPUTATION = Boolean.parseBoolean(System.getProperty("parallel", "False"));
     private static final String IMAGE_FILE = "/tmp/image.jpg";
     private static TaskSchedule tornadoTask;
-    private static final int REPETITIONS = 150;
+    private static final int REPETITIONS = 25;
 
     private void loadImage(String imageFile) {
         try {
@@ -76,8 +76,9 @@ public class ImageTransformer {
             taskStart = System.nanoTime();
             tornadoTask.execute();
             taskEnd = System.nanoTime();
+            double seconds = ((taskEnd - taskStart) * 1E-9);
+            System.out.println("Task time: " + (taskEnd - taskStart) + " (ns) - " +  seconds  + " (s)");
         }
-
 
         // unmarshall
         for (int i = 0; i < w; i++) {
@@ -85,10 +86,9 @@ public class ImageTransformer {
                 image.setRGB(i, j, imageRGB[i * s + j]);
             }
         }
-        System.out.println("Task time: " + (taskEnd - taskStart) + " (ns)");
+
 
         writeImage("parallel.jpg");
-
     }
 
     private void sequential(int w, int s) {
@@ -115,8 +115,10 @@ public class ImageTransformer {
             start = System.nanoTime();
             sequential(w, s);
             end = System.nanoTime();
+            double seconds = ((end - start) * 1E-9);
+            System.out.println("Total time: " + (end - start) + " (ns) - " + seconds  + " (s)");
         }
-        System.out.println("Total time: " + (end - start) + " (ns)");
+
         writeImage("sequential.jpg");
     }
 
